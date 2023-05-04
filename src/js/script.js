@@ -4,51 +4,148 @@ const ctx = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
 
-ctx.fillStyle = 'white';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+const collisionsMap = [];
+for (let i = 0; i < collisions.length; i += 70) {
+  collisionsMap.push(collisions.slice(i, 70 + i));
+}
+
+class Boundary {
+  static width = 48;
+  static height = 48;
+  constructor({ position }) {
+    this.position = position;
+    this.width = 48;
+    this.height = 48;
+  }
+
+  draw() {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+  }
+}
+
+const boundaries = [];
+
+const offset = {
+  x: -735,
+  y: -650,
+};
+
+collisionsMap.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    if (symbol === 1025)
+      boundaries.push(
+        new Boundary({
+          position: { x: j * Boundary.width + offset.x, y: i * Boundary.height + offset.y },
+        })
+      );
+  });
+});
+
+console.log(boundaries);
 
 const mapImg = new Image();
-mapImg.src = './assets-game/pellet-town.png';
+mapImg.src = './assets/Pellet Town.png';
 
 const playerImg = new Image();
-playerImg.src = './assets-game/playerDown.png';
+playerImg.src = './assets/playerDown.png';
 
-mapImg.onload = () => {
-  ctx.drawImage(mapImg, -736, -600);
-  playerImg.onload = () => {
-    ctx.drawImage(
-      playerImg,
-      0,
-      0,
-      playerImg.width / 4,
-      playerImg.height,
-      canvas.width / 2 - playerImg.width / 4 / 2,
-      canvas.height / 2 - playerImg.height / 2,
-      playerImg.width / 4,
-      playerImg.height
-    );
-  };
+class Sprite {
+  constructor({ position, velocity, image }) {
+    this.position = position;
+    this.image = image;
+  }
+
+  draw() {
+    ctx.drawImage(this.image, this.position.x, this.position.y);
+  }
+}
+
+const background = new Sprite({
+  position: { x: offset.x, y: offset.y },
+  image: mapImg,
+});
+
+const keys = {
+  w: {
+    pressed: false,
+  },
+  a: {
+    pressed: false,
+  },
+  s: {
+    pressed: false,
+  },
+  d: {
+    pressed: false,
+  },
 };
 
 function animate() {
   window.requestAnimationFrame(animate);
-  console.log('animation frame');
+  background.draw();
+  boundaries.forEach((bounday) => {
+    bounday.draw();
+  });
+  ctx.drawImage(
+    playerImg,
+    0,
+    0,
+    playerImg.width / 4,
+    playerImg.height,
+    canvas.width / 2 - playerImg.width / 4 / 2,
+    canvas.height / 2 - playerImg.height / 2,
+    playerImg.width / 4,
+    playerImg.height
+  );
+
+  if (keys.w.pressed && lastKey === 'w') {
+    background.position.y += 3;
+  } else if (keys.a.pressed && lastKey === 'a') {
+    background.position.x += 3;
+  } else if (keys.d.pressed && lastKey === 'd') {
+    background.position.x -= 3;
+  } else if (keys.s.pressed && lastKey === 's') {
+    background.position.y -= 3;
+  }
 }
 animate();
 
+let lastKey = '';
 window.addEventListener('keydown', (e) => {
   switch (e.key) {
     case 'w':
-      console.log('w');
+      keys.w.pressed = true;
+      lastKey = 'w';
       break;
     case 'a':
-      console.log('a');
-      break;
-    case 'd':
-      console.log('d');
+      keys.a.pressed = true;
+      lastKey = 'a';
       break;
     case 's':
-      console.log('s');
+      keys.s.pressed = true;
+      lastKey = 's';
+      break;
+    case 'd':
+      keys.d.pressed = true;
+      lastKey = 'd';
+      break;
+  }
+});
+
+window.addEventListener('keyup', (e) => {
+  switch (e.key) {
+    case 'w':
+      keys.w.pressed = false;
+      break;
+    case 'a':
+      keys.a.pressed = false;
+      break;
+    case 's':
+      keys.s.pressed = false;
+      break;
+    case 'd':
+      keys.d.pressed = false;
       break;
   }
 });

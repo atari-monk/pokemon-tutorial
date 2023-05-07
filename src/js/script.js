@@ -120,8 +120,13 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
+const battle = {
+  initiated: false,
+};
+
 function animate() {
-  window.requestAnimationFrame(animate);
+  const animationId = window.requestAnimationFrame(animate);
+  console.log(animationId);
   background.draw(ctx);
   boundaries.forEach((bounday) => {
     bounday.draw(ctx);
@@ -132,6 +137,12 @@ function animate() {
   player.draw(ctx);
   foreground.draw(ctx);
 
+  let moving = true;
+  player.moving = false;
+
+  if (battle.initiated) return;
+
+  //activate a battle
   if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
     for (let i = 0; i < battleZones.length; i++) {
       const battleZone = battleZones[i];
@@ -151,16 +162,37 @@ function animate() {
           rectangle1: player,
           rectangle2: battleZone,
         }) &&
-        overlappingArea > (player.width * player.height) / 2
+        overlappingArea > (player.width * player.height) / 2 &&
+        Math.random() < 0.1
       ) {
-        console.log('battle zone collisjdfhgijsdf');
+        console.log('activate battle');
+
+        //deactivate current animation loop
+        window.cancelAnimationFrame(animationId);
+
+        battle.initiated = true;
+        gsap.to('#canvas-overlay', {
+          opacity: 1,
+          repeat: 3,
+          yoyo: true,
+          duration: 0.4,
+          onComplete() {
+            gsap.to('#canvas-overlay', {
+              opacity: 1,
+              duration: 0.4,
+              onComplete() {
+                //activate a new animation loop
+                animateBattle();
+                gsap.to('#canvas-overlay', { opacity: 0, duration: 0.4 });
+              },
+            });
+          },
+        });
         break;
       }
     }
   }
 
-  let moving = true;
-  player.moving = false;
   if (keys.w.pressed && lastKey === 'w') {
     player.moving = true;
     player.image = player.sprites.up;
@@ -253,6 +285,18 @@ function animate() {
   }
 }
 animate();
+
+const battleBackgroundImage = new Image();
+battleBackgroundImage.src = './assets/battleBackground.png';
+const battleBackground = new Sprite({
+  position: { x: 0, y: 0 },
+  image: battleBackgroundImage,
+});
+function animateBattle() {
+  window.requestAnimationFrame(animateBattle);
+  console.log('animate Battle');
+  battleBackground.draw(ctx);
+}
 
 let lastKey = '';
 window.addEventListener('keydown', (e) => {

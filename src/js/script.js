@@ -75,7 +75,7 @@ const player = new Sprite({
     y: canvas.height / 2 - 68 / 2,
   },
   image: playerDownImage,
-  frames: { max: 4 },
+  frames: { max: 4, hold: 10 },
   sprites: {
     up: playerUpImage,
     down: playerDownImage,
@@ -138,7 +138,7 @@ function animate() {
   foreground.draw(ctx);
 
   let moving = true;
-  player.moving = false;
+  player.animate = false;
 
   if (battle.initiated) return;
 
@@ -163,7 +163,7 @@ function animate() {
           rectangle2: battleZone,
         }) &&
         overlappingArea > (player.width * player.height) / 2 &&
-        Math.random() < 0.1
+        Math.random() < 0.01
       ) {
         console.log('activate battle');
 
@@ -194,7 +194,7 @@ function animate() {
   }
 
   if (keys.w.pressed && lastKey === 'w') {
-    player.moving = true;
+    player.animate = true;
     player.image = player.sprites.up;
     {
       for (let i = 0; i < boundaries.length; i++) {
@@ -217,7 +217,7 @@ function animate() {
       if (moving) movables.forEach((movable) => (movable.position.y += 3));
     }
   } else if (keys.a.pressed && lastKey === 'a') {
-    player.moving = true;
+    player.animate = true;
     player.image = player.sprites.left;
     {
       for (let i = 0; i < boundaries.length; i++) {
@@ -239,7 +239,7 @@ function animate() {
       if (moving) movables.forEach((movable) => (movable.position.x += 3));
     }
   } else if (keys.d.pressed && lastKey === 'd') {
-    player.moving = true;
+    player.animate = true;
     player.image = player.sprites.right;
     {
       for (let i = 0; i < boundaries.length; i++) {
@@ -261,7 +261,7 @@ function animate() {
       if (moving) movables.forEach((movable) => (movable.position.x -= 3));
     }
   } else if (keys.s.pressed && lastKey === 's') {
-    player.moving = true;
+    player.animate = true;
     player.image = player.sprites.down;
     {
       for (let i = 0; i < boundaries.length; i++) {
@@ -284,7 +284,7 @@ function animate() {
     }
   }
 }
-animate();
+//animate();
 
 const battleBackgroundImage = new Image();
 battleBackgroundImage.src = './assets/battleBackground.png';
@@ -292,11 +292,47 @@ const battleBackground = new Sprite({
   position: { x: 0, y: 0 },
   image: battleBackgroundImage,
 });
+
+const draggleImage = new Image();
+draggleImage.src = './assets/draggleSprite.png';
+const draggle = new Sprite({
+  position: {
+    x: 800,
+    y: 100,
+  },
+  image: draggleImage,
+  frames: {
+    max: 4,
+    hold: 30,
+  },
+  animate: true,
+});
+
+const embyImage = new Image();
+embyImage.src = './assets/embySprite.png';
+const emby = new Sprite({
+  position: {
+    x: 280,
+    y: 325,
+  },
+  image: embyImage,
+  frames: {
+    max: 4,
+    hold: 30,
+  },
+  animate: true,
+});
+
 function animateBattle() {
   window.requestAnimationFrame(animateBattle);
   console.log('animate Battle');
   battleBackground.draw(ctx);
+  draggle.draw(ctx);
+  emby.draw(ctx);
 }
+
+//animate();
+animateBattle();
 
 let lastKey = '';
 window.addEventListener('keydown', (e) => {

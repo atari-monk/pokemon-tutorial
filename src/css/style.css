@@ -61,3 +61,47 @@ button:hover {
   width: 33.33%;
   border-left: 4px black solid;
 }
+
+#draggle-health-bar-container {
+  background-color: white;
+  width: 250px;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  border: 4px black solid;
+  padding: 12px;
+}
+
+#emby-health-bar-container {
+  background-color: white;
+  width: 250px;
+  position: absolute;
+  top: 330px;
+  right: 50px;
+  border: 4px black solid;
+  padding: 12px;
+}
+
+#health-bar-text {
+  font-size: 16px;
+}
+
+#health-bar {
+  position: relative;
+}
+
+#health-bar-grey {
+  height: 5px;
+  background-color: #ccc;
+  margin-top: 10px;
+}
+
+#health-bar-green {
+  height: 5px;
+  background-color: green;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}

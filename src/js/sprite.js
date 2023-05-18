@@ -7,6 +7,7 @@ export class Sprite {
     animate = false,
     isEnemy = false,
     rotation = 0,
+    name
   }) {
     this.position = position;
     this.image = image;
@@ -21,6 +22,7 @@ export class Sprite {
     this.health = 100;
     this.isEnemy = isEnemy;
     this.rotation = rotation;
+    this.name = name;
   }
 
   draw(ctx) {
@@ -60,6 +62,10 @@ export class Sprite {
   }
 
   attack({ attack, recipient, renderedSprites }) {
+    const dialogueBox = document.querySelector('#dialogue-box');
+    dialogueBox.style.display = 'block';
+    dialogueBox.innerHTML = `${this.name} used ${attack.name}`;
+
     let healthBar = '#enemy-health-bar';
     if (this.isEnemy) healthBar = '#player-health-bar';
 

@@ -1,5 +1,6 @@
 import { Boundary } from './Boundary.js';
 import { Sprite } from './Sprite.js';
+import { Battle } from './Battle.js';
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
@@ -286,70 +287,8 @@ function animate() {
 }
 //animate();
 
-const battleBackgroundImage = new Image();
-battleBackgroundImage.src = './assets/battleBackground.png';
-const battleBackground = new Sprite({
-  position: { x: 0, y: 0 },
-  image: battleBackgroundImage,
-});
-
-const draggleImage = new Image();
-draggleImage.src = './assets/draggleSprite.png';
-const draggle = new Sprite({
-  position: {
-    x: 800,
-    y: 100,
-  },
-  image: draggleImage,
-  frames: {
-    max: 4,
-    hold: 30,
-  },
-  animate: true,
-  isEnemy: true,
-});
-
-const embyImage = new Image();
-embyImage.src = './assets/embySprite.png';
-const emby = new Sprite({
-  position: {
-    x: 280,
-    y: 325,
-  },
-  image: embyImage,
-  frames: {
-    max: 4,
-    hold: 30,
-  },
-  animate: true,
-});
-
-const renderedSprites = [draggle, emby];
-function animateBattle() {
-  window.requestAnimationFrame(animateBattle);
-
-  console.log('animate Battle');
-  battleBackground.draw(ctx);
-
-  renderedSprites.forEach((sprite) => {
-    sprite.draw(ctx);
-  });
-}
-
-//animate();
-animateBattle();
-
-//event listeners for attack buttons
-document.querySelectorAll('button').forEach((button) => {
-  button.addEventListener('click', (e) => {
-    const selectedAttack = attacks[e.currentTarget.innerHTML];
-    emby.attack({
-      attack: selectedAttack,
-      recipient: draggle,
-      renderedSprites,
-    });
-  });
-});
+const battleScene = new Battle(ctx, document.querySelectorAll('button'));
+battleScene.animateBattle();
 
 let lastKey = '';
 window.addEventListener('keydown', (e) => {

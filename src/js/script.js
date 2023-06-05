@@ -287,7 +287,7 @@ function animate() {
 }
 //animate();
 
-const battleScene = new Battle(ctx, document.querySelectorAll('button'));
+const battleScene = new Battle(ctx);
 battleScene.animateBattle();
 
 let lastKey = '';

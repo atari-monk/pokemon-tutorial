@@ -48,13 +48,13 @@ button:hover {
   display: flex;
 }
 
-#atacks-container {
+#attacks-container {
   width: 66.66%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
-#atack-type-container {
+#attack-type-container {
   display: flex;
   align-items: center;
   justify-content: center;

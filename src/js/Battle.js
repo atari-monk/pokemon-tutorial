@@ -1,10 +1,11 @@
 import { Sprite } from './Sprite.js';
+import { Monster } from './Monster.js';
 import { attacks } from './data/attacks.js';
+import { monsters } from './data/monsters.js';
 
 export class Battle {
-  constructor(ctx, buttons) {
+  constructor(ctx) {
     this.ctx = ctx;
-    this.buttons = buttons;
     this.renderedSprites = [];
     this.attacks = attacks;
 
@@ -15,26 +16,8 @@ export class Battle {
       image: this.battleBackgroundImage,
     });
 
-    this.draggleImage = new Image();
-    this.draggleImage.src = './assets/draggleSprite.png';
-    this.draggle = new Sprite({
-      position: { x: 800, y: 100 },
-      image: this.draggleImage,
-      frames: { max: 4, hold: 30 },
-      animate: true,
-      isEnemy: true,
-      name: 'Draggle',
-    });
-
-    this.embyImage = new Image();
-    this.embyImage.src = './assets/embySprite.png';
-    this.emby = new Sprite({
-      position: { x: 280, y: 325 },
-      image: this.embyImage,
-      frames: { max: 4, hold: 30 },
-      animate: true,
-      name: 'Emby',
-    });
+    this.draggle = new Monster(monsters.Draggle);
+    this.emby = new Monster(monsters.Emby);
 
     this.queue = [];
 
@@ -43,6 +26,15 @@ export class Battle {
 
   initialize() {
     this.renderedSprites = [this.draggle, this.emby];
+
+    this.emby.attacks.forEach((attack) => {
+      const button = document.createElement('button');
+      button.innerHTML = attack.name;
+      document.querySelector('#attacks-container').append(button);
+    });
+
+    this.buttons = document.querySelectorAll('button');
+
     this.buttons.forEach((button) => {
       button.addEventListener('click', (e) => {
         const selectedAttack = this.attacks[e.currentTarget.innerHTML];

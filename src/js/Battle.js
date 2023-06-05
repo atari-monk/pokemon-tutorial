@@ -36,6 +36,8 @@ export class Battle {
       name: 'Emby',
     });
 
+    this.queue = [];
+
     this.initialize();
   }
 
@@ -49,12 +51,31 @@ export class Battle {
           recipient: this.draggle,
           renderedSprites: this.renderedSprites,
         });
+
+        this.queue.push(() => {
+          this.draggle.attack({
+            attack: this.attacks.Tackle,
+            recipient: this.emby,
+            renderedSprites: this.renderedSprites,
+          });
+        });
+
+        this.queue.push(() => {
+          this.draggle.attack({
+            attack: this.attacks.Fireball,
+            recipient: this.emby,
+            renderedSprites: this.renderedSprites,
+          });
+        });
       });
     });
 
     const dialogueBox = document.querySelector('#dialogue-box');
     dialogueBox.addEventListener('click', (e) => {
-      e.currentTarget.style.display = 'none';
+      if (this.queue.length > 0) {
+        this.queue[0]();
+        this.queue.shift();
+      } else e.currentTarget.style.display = 'none';
     });
   }
 

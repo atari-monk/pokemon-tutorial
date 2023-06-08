@@ -2,6 +2,7 @@ import { Sprite } from './Sprite.js';
 import { Monster } from './Monster.js';
 import { attacks } from './data/attacks.js';
 import { monsters } from './data/monsters.js';
+import { audio } from './data/audio.js';
 
 export class Battle {
   #animationId;
@@ -13,7 +14,6 @@ export class Battle {
     this.attacks = attacks;
     this.#animationId = 0;
     this.#animate = animate;
-    console.log(this.#animate);
 
     this.battleBackgroundImage = new Image();
     this.battleBackgroundImage.src = './assets/battleBackground.png';
@@ -87,6 +87,7 @@ export class Battle {
             });
           });
           this.initiated = false;
+          audio.map.play();
         }
 
         const randomAttack =
@@ -118,6 +119,7 @@ export class Battle {
               });
             });
             this.initiated = false;
+            audio.map.play();
           }
         });
       });
@@ -137,8 +139,6 @@ export class Battle {
     );
 
     this.battleBackground.draw(this.ctx);
-
-    console.log('this.#animationId: ', this.#animationId);
 
     this.renderedSprites.forEach((sprite) => {
       sprite.draw(this.ctx);

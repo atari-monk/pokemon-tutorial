@@ -1,10 +1,10 @@
 import { Boundary } from './Boundary.js';
 import { Sprite } from './Sprite.js';
 import { Battle } from './Battle.js';
+import { audio } from './data/audio.js';
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
-
 canvas.width = 1024;
 canvas.height = 576;
 
@@ -121,14 +121,10 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
-// const battle = {
-//   initiated: false,
-// };
 const battleScene = new Battle(ctx, animate);
 
 function animate() {
   const animationId = window.requestAnimationFrame(animate);
-  console.log(animationId);
   background.draw(ctx);
   boundaries.forEach((bounday) => {
     bounday.draw(ctx);
@@ -167,10 +163,13 @@ function animate() {
         overlappingArea > (player.width * player.height) / 2 &&
         Math.random() < 0.01
       ) {
-        console.log('activate battle');
 
         //deactivate current animation loop
         window.cancelAnimationFrame(animationId);
+
+        audio.map.stop();
+        audio.initBattle.play();
+        audio.battle.play();
 
         battleScene.initiated = true;
         gsap.to('#canvas-overlay', {
@@ -211,7 +210,6 @@ function animate() {
             },
           })
         ) {
-          console.log('colliding');
           moving = false;
           break;
         }
@@ -234,7 +232,6 @@ function animate() {
             },
           })
         ) {
-          console.log('colliding');
           moving = false;
           break;
         }
@@ -256,7 +253,6 @@ function animate() {
             },
           })
         ) {
-          console.log('colliding');
           moving = false;
           break;
         }
@@ -278,7 +274,6 @@ function animate() {
             },
           })
         ) {
-          console.log('colliding');
           moving = false;
           break;
         }
@@ -287,11 +282,10 @@ function animate() {
     }
   }
 }
-//animate();
+animate();
 
-//const battleScene = new Battle(ctx, animate);
-battleScene.initBattle();
-battleScene.animateBattle();
+//battleScene.initBattle();
+//battleScene.animateBattle();
 
 let lastKey = '';
 window.addEventListener('keydown', (e) => {
@@ -329,5 +323,13 @@ window.addEventListener('keyup', (e) => {
     case 'd':
       keys.d.pressed = false;
       break;
+  }
+});
+
+let clicked = false;
+window.addEventListener('click', () => {
+  if (!clicked) {
+    audio.map.play();
+    clicked = true;
   }
 });

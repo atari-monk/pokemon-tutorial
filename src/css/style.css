@@ -118,3 +118,7 @@ button:hover {
   display: none;
   cursor: pointer;
 }
+
+.user-interface {
+  display: none;
+}

@@ -1,4 +1,5 @@
 import { Sprite } from './Sprite.js';
+import { audio } from './data/audio.js';
 
 export class Monster extends Sprite {
   constructor({
@@ -24,6 +25,8 @@ export class Monster extends Sprite {
     dialogueBox.innerHTML = `${this.name} fainted!`;
     gsap.to(this.position, { y: this.position.y + 20 });
     gsap.to(this, { opacity: 0 });
+    audio.battle.stop();
+    audio.victory.play();
   }
 
   attack({ attack, recipient, renderedSprites }) {
@@ -41,6 +44,7 @@ export class Monster extends Sprite {
 
     switch (attack.name) {
       case 'Fireball':
+        audio.initFireball.play();
         const fireballImage = new Image();
         fireballImage.src = './assets/fireball.png';
         const fireball = new Sprite({
@@ -61,6 +65,7 @@ export class Monster extends Sprite {
           y: recipient.position.y,
           onComplete: () => {
             //enemy gets hit
+            audio.fireballHit.play();
             gsap.to(healthBar, {
               width: recipient.health + '%',
             });
@@ -97,6 +102,7 @@ export class Monster extends Sprite {
             duration: 0.1,
             onComplete: () => {
               //enemy gets hit
+              audio.tackleHit.play();
               gsap.to(healthBar, {
                 width: recipient.health + '%',
               });

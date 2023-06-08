@@ -57,6 +57,12 @@ export class Battle {
           });
         });
       });
+
+      button.addEventListener('mouseenter', (e) => {
+        const selectedAttack = this.attacks[e.currentTarget.innerHTML];
+        document.querySelector('#attack-type').innerHTML = selectedAttack.type;
+        document.querySelector('#attack-type').style.color = selectedAttack.color;
+      });
     });
 
     const dialogueBox = document.querySelector('#dialogue-box');

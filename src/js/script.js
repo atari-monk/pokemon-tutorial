@@ -121,9 +121,10 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
-const battle = {
-  initiated: false,
-};
+// const battle = {
+//   initiated: false,
+// };
+const battleScene = new Battle(ctx, animate);
 
 function animate() {
   const animationId = window.requestAnimationFrame(animate);
@@ -141,7 +142,7 @@ function animate() {
   let moving = true;
   player.animate = false;
 
-  if (battle.initiated) return;
+  if (battleScene.initiated) return;
 
   //activate a battle
   if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
@@ -171,7 +172,7 @@ function animate() {
         //deactivate current animation loop
         window.cancelAnimationFrame(animationId);
 
-        battle.initiated = true;
+        battleScene.initiated = true;
         gsap.to('#canvas-overlay', {
           opacity: 1,
           repeat: 3,
@@ -183,7 +184,8 @@ function animate() {
               duration: 0.4,
               onComplete() {
                 //activate a new animation loop
-                animateBattle();
+                battleScene.initBattle();
+                battleScene.animateBattle();
                 gsap.to('#canvas-overlay', { opacity: 0, duration: 0.4 });
               },
             });
@@ -287,7 +289,8 @@ function animate() {
 }
 //animate();
 
-const battleScene = new Battle(ctx);
+//const battleScene = new Battle(ctx, animate);
+battleScene.initBattle();
 battleScene.animateBattle();
 
 let lastKey = '';

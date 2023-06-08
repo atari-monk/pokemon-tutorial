@@ -1,5 +1,5 @@
-const defaultVolume = 0.2;
-const highVolume = 0.8;
+const defaultVolume = 0.1;
+const highVolume = 0.5;
 export const audio = {
   map: new Howl({
     src: './../../assets/audio/map.wav',

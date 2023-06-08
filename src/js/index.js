@@ -163,7 +163,6 @@ function animate() {
         overlappingArea > (player.width * player.height) / 2 &&
         Math.random() < 0.01
       ) {
-
         //deactivate current animation loop
         window.cancelAnimationFrame(animationId);
 
@@ -326,6 +325,7 @@ window.addEventListener('keyup', (e) => {
   }
 });
 
+//no autoplay policy of browsers
 let clicked = false;
 window.addEventListener('click', () => {
   if (!clicked) {

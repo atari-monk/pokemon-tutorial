@@ -44,6 +44,14 @@ export class Battle {
           renderedSprites: this.renderedSprites,
         });
 
+        if (this.draggle.health <= 0) {
+          this.queue.push(() => {
+            this.draggle.faint();
+          });
+
+          return;
+        }
+
         const randomAttack =
           this.draggle.attacks[
             Math.floor(Math.random() * this.draggle.attacks.length)
@@ -55,13 +63,20 @@ export class Battle {
             recipient: this.emby,
             renderedSprites: this.renderedSprites,
           });
+
+          if (this.emby.health <= 0) {
+            this.queue.push(() => {
+              this.emby.faint();
+            });
+          }
         });
       });
 
       button.addEventListener('mouseenter', (e) => {
         const selectedAttack = this.attacks[e.currentTarget.innerHTML];
         document.querySelector('#attack-type').innerHTML = selectedAttack.type;
-        document.querySelector('#attack-type').style.color = selectedAttack.color;
+        document.querySelector('#attack-type').style.color =
+          selectedAttack.color;
       });
     });
 

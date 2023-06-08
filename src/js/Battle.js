@@ -44,17 +44,14 @@ export class Battle {
           renderedSprites: this.renderedSprites,
         });
 
-        this.queue.push(() => {
-          this.draggle.attack({
-            attack: this.attacks.Tackle,
-            recipient: this.emby,
-            renderedSprites: this.renderedSprites,
-          });
-        });
+        const randomAttack =
+          this.draggle.attacks[
+            Math.floor(Math.random() * this.draggle.attacks.length)
+          ];
 
         this.queue.push(() => {
           this.draggle.attack({
-            attack: this.attacks.Fireball,
+            attack: randomAttack,
             recipient: this.emby,
             renderedSprites: this.renderedSprites,
           });
